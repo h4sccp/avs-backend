@@ -16,4 +16,5 @@ RUN mkdir -p /data && chown -R avs:avs /data && chown -R avs:avs /app
 USER avs
 
 EXPOSE 8080
-CMD ["python", "-m", "avs.app"]
+# replace the last line with this:
+CMD ["sh","-c","uvicorn avs.app:app --host 0.0.0.0 --port ${PORT:-7860}"]
