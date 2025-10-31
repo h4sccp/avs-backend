@@ -1,20 +1,18 @@
-FROM python:3.11-slim
+# Use a lightweight Python image
+FROM python:3.13-slim
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-RUN useradd -m -u 10001 avs
-
+# Set work directory
 WORKDIR /app
-COPY requirements.txt ./
+
+# Copy requirements and install
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY avs/ ./avs/
+# Copy the entire project
+COPY . .
 
-RUN mkdir -p /data && chown -R avs:avs /data && chown -R avs:avs /app
-USER avs
-
+# Expose the port
 EXPOSE 8080
-# replace the last line with this:
-CMD ["sh","-c","uvicorn avs.app:app --host 0.0.0.0 --port ${PORT:-7860}"]
+
+# Start the FastAPI app
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
