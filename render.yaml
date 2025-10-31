@@ -2,17 +2,9 @@ services:
   - type: web
     name: avs-backend
     env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app:app --host 0.0.0.0 --port $PORT"
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn avs.app:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: ALLOW_ORIGIN
-        value: https://YOUR_GH_USERNAME.github.io/YOUR_FRONTEND_REPO
-      - key: RECAPTCHA_SECRET
-        value: ""
-      - key: SQLITE_PATH
-        value: /data/avs.sqlite
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
+        value: "https://<your-github-username>.github.io"
